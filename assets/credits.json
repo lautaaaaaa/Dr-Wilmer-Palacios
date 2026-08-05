@@ -1,0 +1,53 @@
+{
+  "_nota": "Procedencia de las imagenes usadas en la web. Las fotos de servicios siguen siendo stock provisional; el resto ya es material propio del Dr. Palacios.",
+
+  "_fotos_propias_del_dr": {
+    "archivos": [
+      "hero.jpg",
+      "doctor-hero.jpg",
+      "doctor-about.jpg",
+      "ba-rinoplastia-antes.jpg",
+      "ba-rinoplastia-despues.jpg",
+      "ba-rinoseptoplastia-primaria-antes.jpg",
+      "ba-rinoseptoplastia-primaria-despues.jpg",
+      "ba-rinoseptoplastia-secundaria-antes.jpg",
+      "ba-rinoseptoplastia-secundaria-despues.jpg",
+      "ba-mentoplastia-antes.jpg",
+      "ba-mentoplastia-despues.jpg"
+    ],
+    "origen": "Entregadas por el Dr. Palacios. Sin restricciones de licencia, no requieren atribución.",
+    "nota": "Los 8 antes/después son fotos de pacientes reales. Confirmar con él que tiene consentimiento para uso en la web antes de publicar (ver PENDIENTES.md, punto 2)."
+  },
+
+  "service-ultrasonica.jpg": {
+    "title": "Medical surgery, healthcare photo",
+    "creator": "rawpixel",
+    "license": "CC0 1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "rawpixel via Openverse",
+    "source_url": "https://www.rawpixel.com/image/6022412/photo-image-public-domain-person-doctor",
+    "atribucion_requerida": false
+  },
+
+  "service-orl.jpg": {
+    "title": "Clinician examining a patient's ear with an otoscope",
+    "creator": "Centers for Disease Control and Prevention (Public Health Image Library)",
+    "license": "CC0 1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "rawpixel via Openverse",
+    "source_url": "https://www.rawpixel.com/image/2288500/free-photo-image-ear-doctor-checkup",
+    "atribucion_requerida": false
+  },
+
+  "_stock_reutilizado_de_proyecto_propio": {
+    "archivos": [
+      "service-rinoplastia.jpg",
+      "service-secundaria.jpg",
+      "service-septoplastia.jpg",
+      "service-rinitis.webp",
+      "service-armonizacion.jpg"
+    ],
+    "origen": "Proyecto web de la Dra. Elsa Sanchez (mismo rubro: otorrinolaringologia y rinologia).",
+    "nota": "Stock generico de consulta clinica, no son fotos de pacientes. Verificar que la licencia original cubra este segundo uso antes de publicar. Pendiente decidir si se reemplazan por más material propio del Dr."
+  }
+}
