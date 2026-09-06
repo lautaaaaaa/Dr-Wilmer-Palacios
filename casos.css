@@ -1,0 +1,544 @@
+/* ══════════════════════════════════════════════════════════════════════
+   Dr. Wilmer Palacios. Galería de casos (casos.html).
+
+   Se carga DESPUÉS de styles.css y solo en esta página. Reutiliza los
+   tokens de :root de styles.css (paleta, tipografías, spacing): acá no
+   se define ninguna variable de marca nueva.
+
+   Nota sobre el layout de cada caso: la foto NO va dentro de un contenedor
+   de proporción fija. Cada caso trae su propio aspect-ratio en la variable
+   --ar (viene del JS, calculada del archivo real), porque las fotos del Dr.
+   vienen de Instagram con proporciones distintas, de 1:1 a 3:2. Forzarlas
+   todas a la misma caja las recortaría o las dejaría con franjas negras.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ─── HEADER DE PÁGINA ─────────────────────────────────────────────────
+   Esta página no tiene hero, y el .nav es transparente hasta que se
+   scrollea 50px (lo maneja main.js). Por eso el header arranca en navy:
+   así el nav transparente sigue siendo legible arriba de todo. */
+.casos-hero {
+  background: var(--bg-dark);
+  color: var(--text-light);
+  padding-block: clamp(7rem, 12vw, 9.5rem) clamp(3rem, 6vw, 4.5rem);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+/* Halo de cobre muy tenue, mismo recurso que usa el hero de la home. */
+.casos-hero::after {
+  content: '';
+  position: absolute;
+  top: -35%; left: 50%;
+  width: min(900px, 120vw); aspect-ratio: 1;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(176,118,74,0.16) 0%, transparent 62%);
+  pointer-events: none;
+}
+.casos-hero > .container { position: relative; z-index: 1; }
+
+.casos-hero .section-kicker { color: var(--gold-light); }
+.casos-hero h1 {
+  font-family: var(--serif-display);
+  font-weight: 500;
+  font-size: clamp(2.1rem, 5.5vw, 3.4rem);
+  line-height: 1.1;
+  margin-bottom: 0.9rem;
+}
+.casos-hero h1 em {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--gold-light);
+}
+.casos-hero__lead {
+  max-width: 62ch;
+  margin-inline: auto;
+  color: rgba(246,243,238,0.72);
+  font-size: clamp(0.95rem, 1.6vw, 1.05rem);
+  line-height: 1.7;
+}
+
+/* Contador de volumen: es el argumento principal de la página. */
+.casos-stats {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(1.5rem, 5vw, 3.5rem);
+  margin-top: clamp(2rem, 4vw, 2.8rem);
+  padding-top: clamp(1.6rem, 3vw, 2.2rem);
+  border-top: 1px solid var(--line-dark);
+}
+.casos-stat { display: flex; flex-direction: column; gap: 0.3rem; }
+.casos-stat__num {
+  font-family: var(--serif-display);
+  font-size: clamp(1.9rem, 4.5vw, 2.7rem);
+  line-height: 1;
+  color: var(--gold-light);
+}
+.casos-stat__label {
+  font-family: var(--sans);
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(246,243,238,0.55);
+}
+
+/* ─── BARRA DE FILTROS ─────────────────────────────────────────────────
+   Sticky bajo el nav. El nav mide ~68px cuando está sólido; se deja 62px
+   para que la barra se apoye justo debajo sin dejar una franja del fondo. */
+.casos-filtros {
+  position: sticky;
+  top: 62px;
+  z-index: 40;
+  background: rgba(246,243,238,0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+  padding-block: 0.9rem;
+}
+.casos-filtros__inner {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.5rem;
+}
+.casos-filtro-grupo { display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; }
+.casos-filtro-grupo__label {
+  font-family: var(--sans);
+  font-size: 0.63rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  margin-right: 0.15rem;
+}
+
+.chip {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-soft);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.34rem 0.8rem;
+  cursor: pointer;
+  transition: background 0.25s var(--ease-out), color 0.25s var(--ease-out),
+              border-color 0.25s var(--ease-out);
+  white-space: nowrap;
+}
+.chip:hover { border-color: var(--gold); color: var(--gold-dark); }
+.chip.is-active {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--text-light);
+}
+.chip__n { opacity: 0.5; margin-left: 0.3rem; font-variant-numeric: tabular-nums; }
+
+.casos-filtros__resultado {
+  margin-left: auto;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--text-mute);
+}
+.casos-filtros__reset {
+  background: none; border: none; cursor: pointer;
+  font-family: var(--sans); font-size: 0.78rem;
+  color: var(--gold-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0;
+  margin-left: 0.75rem;
+}
+
+/* ─── GRILLA DE CASOS ──────────────────────────────────────────────────
+   Tres tarjetas por fila en escritorio, dos en tablet, una en teléfono.
+   Cada tarjeta es la foto arriba y el texto abajo, con la descripción
+   recortada: el caso completo se lee en el lightbox. */
+/* Sin align-items: start, para que las tarjetas de una misma fila se
+   estiren a la altura de la más alta. Como cada tarjeta es flex en
+   columna y el botón lleva margin-top: auto, los botones de una fila
+   quedan alineados aunque las descripciones midan distinto. */
+.casos-lista {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.caso {
+  display: flex;
+  flex-direction: column;
+  scroll-margin-top: 130px;
+}
+
+/* ── Visor de fotos ──
+   Todas las tarjetas comparten una caja 4:3 para que la grilla quede
+   pareja, y la foto va con object-fit: contain. NO se usa cover: las
+   fotos del Dr. traen el antes y el después pegados uno al lado del
+   otro, y cualquier recorte lateral se come el borde de una de las dos
+   caras. Las proporciones van de 1:1 a 3:2, así que alguna queda con
+   una franja del navy de fondo, y eso es preferible a recortarla. */
+.caso__visor { position: relative; }
+.caso__marco {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--bg-dark2);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  cursor: zoom-in;
+}
+.caso__foto {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.45s var(--ease-out);
+}
+.caso__foto.is-current { opacity: 1; }
+
+/* Etiquetas antes/después. Las fotos del Dr. ya vienen con las dos mitades
+   en una sola imagen: estas etiquetas solo le dicen al visitante cuál es
+   cuál, porque no todas las fotos lo indican. */
+.caso__tag {
+  position: absolute;
+  bottom: 0.8rem;
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  background: rgba(15,30,46,0.62);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  pointer-events: none;
+  z-index: 2;
+}
+.caso__tag--antes   { left: 0.8rem; }
+.caso__tag--despues { right: 0.8rem; }
+
+/* Flechas para pasar de ángulo */
+.caso__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 38px; height: 38px;
+  display: grid; place-items: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(246,243,238,0.9);
+  color: var(--navy);
+  font-size: 1.1rem; line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out), background 0.25s;
+}
+.caso__marco:hover .caso__nav,
+.caso__nav:focus-visible { opacity: 1; }
+.caso__nav:hover { background: #fff; }
+.caso__nav--prev { left: 0.7rem; }
+.caso__nav--next { right: 0.7rem; }
+/* En touch no hay hover: las flechas quedan siempre visibles. */
+@media (hover: none) {
+  .caso__nav { opacity: 0.92; }
+}
+
+/* Puntos + contador de ángulos */
+.caso__angulos {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.85rem;
+}
+.caso__punto {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: var(--line);
+  cursor: pointer;
+  transition: background 0.25s, transform 0.25s;
+}
+.caso__punto.is-active { background: var(--gold); transform: scale(1.35); }
+.caso__contador {
+  margin-left: auto;
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  color: var(--text-mute);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Texto del caso ── */
+.caso__info { padding-top: 0.9rem; display: flex; flex-direction: column; flex: 1; }
+.caso__num {
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+.caso__titulo {
+  font-family: var(--serif-display);
+  font-weight: 500;
+  font-size: 1.12rem;
+  line-height: 1.3;
+  margin-bottom: 0.6rem;
+}
+.caso__meta { display: flex; flex-wrap: wrap; gap: 0.32rem; margin-bottom: 0.7rem; }
+.caso__badge {
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--text-soft);
+  background: var(--gold-faint);
+  border: 1px solid rgba(176,118,74,0.22);
+  border-radius: 999px;
+  padding: 0.22rem 0.55rem;
+}
+.caso__badge--postop { background: rgba(15,30,46,0.05); border-color: var(--line); }
+
+/* Recorte a 4 líneas para que todas las tarjetas midan parecido.
+   -webkit-line-clamp sigue siendo la forma que entienden todos los
+   navegadores; el estándar `line-clamp` va al lado para el futuro. */
+.caso__desc p {
+  font-size: 0.83rem;
+  line-height: 1.7;
+  color: var(--text-soft);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
+}
+
+.caso__zoom {
+  margin-top: auto;
+  padding-top: 0.8rem;
+  background: none; border: none;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  cursor: pointer;
+  align-self: flex-start;
+}
+.caso__zoom:hover { color: var(--navy); }
+
+/* ─── CARGA PROGRESIVA ─────────────────────────────────────────────────
+   Los casos entran de a tandas a medida que se scrollea. El botón es el
+   fallback si el IntersectionObserver no dispara (o si el usuario prefiere
+   controlarlo a mano). */
+.casos-mas { text-align: center; margin-top: clamp(3rem, 6vw, 4.5rem); }
+.casos-mas__btn {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--navy);
+  background: transparent;
+  border: 1px solid var(--navy);
+  border-radius: 999px;
+  padding: 0.85rem 2.2rem;
+  cursor: pointer;
+  transition: background 0.3s var(--ease-out), color 0.3s var(--ease-out);
+}
+.casos-mas__btn:hover { background: var(--navy); color: var(--text-light); }
+
+.casos-vacio {
+  text-align: center;
+  padding-block: clamp(3rem, 8vw, 5rem);
+  color: var(--text-mute);
+  font-family: var(--sans);
+}
+
+/* ─── AVISO ────────────────────────────────────────────────────────────*/
+/* Ocupa todo el ancho del contenedor: encajonado en 70ch quedaba como un
+   bloque apretado en el medio de una pantalla de escritorio. */
+.casos-aviso {
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  line-height: 1.8;
+  color: var(--text-mute);
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* ─── LIGHTBOX ─────────────────────────────────────────────────────────*/
+.lb {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  /* Prácticamente opaco a propósito: con 0.94 se transparentaba el nav y
+     el título del header por detrás del visor y ensuciaba la foto. */
+  background: rgba(9,17,26,0.985);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-out);
+}
+.lb.is-open { opacity: 1; pointer-events: auto; }
+
+.lb__visor {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  overflow: hidden;
+}
+/* El transform lo escribe casos.js (translate + scale) para poder ampliar
+   sobre el puntero y recorrer la foto arrastrando. Acá no se define
+   ninguna transformación: pisaría la del script. */
+.lb__img {
+  max-width: 100%;
+  max-height: calc(100vh - 8rem);
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  cursor: zoom-in;
+  transform-origin: center center;
+  touch-action: none;      /* el arrastre lo maneja el script */
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.lb__img.is-zoomed { cursor: grab; }
+.lb__img.is-zoomed:active { cursor: grabbing; }
+
+.lb__cerrar {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  z-index: 5;
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border: none; border-radius: 50%;
+  background: rgba(246,243,238,0.14);
+  color: var(--text-light);
+  font-size: 1.3rem; line-height: 1;
+  cursor: pointer;
+  transition: background 0.25s;
+}
+.lb__cerrar:hover { background: rgba(246,243,238,0.28); }
+
+.lb__nav {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  z-index: 5;
+  width: 46px; height: 46px;
+  display: grid; place-items: center;
+  border: none; border-radius: 50%;
+  background: rgba(246,243,238,0.14);
+  color: var(--text-light);
+  font-size: 1.3rem; line-height: 1;
+  cursor: pointer;
+  transition: background 0.25s;
+}
+.lb__nav:hover { background: rgba(246,243,238,0.28); }
+.lb__nav--prev { left: 1rem; }
+.lb__nav--next { right: 1rem; }
+
+.lb__panel {
+  background: var(--bg-dark);
+  border-left: 1px solid var(--line-dark);
+  padding: clamp(2rem, 4vw, 2.8rem) clamp(1.5rem, 3vw, 2rem);
+  overflow-y: auto;
+  color: var(--text-light);
+}
+.lb__num {
+  font-family: var(--sans);
+  font-size: 0.64rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--gold-light);
+  display: block; margin-bottom: 0.5rem;
+}
+.lb__titulo {
+  font-family: var(--serif-display);
+  font-weight: 500; font-size: 1.35rem; line-height: 1.25;
+  margin-bottom: 0.9rem;
+}
+.lb__meta { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.2rem; }
+.lb__badge {
+  font-family: var(--sans); font-size: 0.64rem;
+  color: rgba(246,243,238,0.8);
+  background: rgba(246,243,238,0.08);
+  border: 1px solid var(--line-dark);
+  border-radius: 999px;
+  padding: 0.25rem 0.62rem;
+}
+.lb__desc p {
+  font-size: 0.84rem; line-height: 1.75;
+  color: rgba(246,243,238,0.72);
+  margin-bottom: 0.7rem;
+}
+.lb__contador {
+  font-family: var(--sans); font-size: 0.7rem;
+  color: rgba(246,243,238,0.45);
+  margin-top: 1.4rem;
+  font-variant-numeric: tabular-nums;
+}
+body.lb-abierto { overflow: hidden; }
+
+/* ─── RESPONSIVE ───────────────────────────────────────────────────────*/
+@media (max-width: 980px) {
+  .casos-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 900px) {
+  .lb { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; }
+  .lb__panel {
+    border-left: none;
+    border-top: 1px solid var(--line-dark);
+    max-height: 42vh;
+    padding: 1.5rem;
+  }
+  .lb__img { max-height: calc(58vh - 3rem); }
+}
+
+@media (max-width: 768px) {
+  /* Los tres datos se apilan (las etiquetas son largas para ponerlas en
+     fila a 375px), así que se compactan para que el header no empuje el
+     primer caso demasiado abajo. */
+  .casos-stats { gap: 1.1rem; margin-top: 1.6rem; padding-top: 1.4rem; }
+  .casos-stat__num { font-size: 1.6rem; }
+  .casos-stat__label { font-size: 0.58rem; letter-spacing: 0.12em; }
+  .casos-hero { padding-block: 6rem 2.5rem; }
+  .casos-hero__lead { font-size: 0.88rem; }
+
+  /* El nav sólido es más bajo en mobile: la barra sticky sube con él. */
+  .casos-filtros { top: 56px; padding-block: 0.6rem; }
+
+  /* Apilados ocupaban 216px de alto, más de un cuarto de la pantalla,
+     y encima pegados arriba. Van en una sola fila con scroll lateral. */
+  .casos-filtros__inner {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0.9rem;
+    padding-bottom: 0.15rem;
+  }
+  .casos-filtros__inner::-webkit-scrollbar { display: none; }
+  .casos-filtro-grupo { flex: 0 0 auto; flex-wrap: nowrap; }
+  .casos-filtros__resultado { flex: 0 0 auto; margin-left: 0.5rem; }
+  .casos-filtros__reset { flex: 0 0 auto; }
+  .casos-lista { grid-template-columns: minmax(0, 1fr); gap: 2.2rem; }
+  .caso__nav { width: 34px; height: 34px; }
+  .lb__nav { width: 38px; height: 38px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caso__foto, .lb__img, .caso__punto, .chip { transition: none; }
+}

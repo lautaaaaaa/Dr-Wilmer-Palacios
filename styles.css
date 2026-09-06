@@ -914,11 +914,18 @@ p { font-size: clamp(0.93rem, 1.5vw, 1.05rem); color: var(--text-soft); line-hei
 /* ─── SERVICES ──────────────────────────────────────────────────────────── */
 #servicios { background: var(--bg); }
 
+/* La grilla es de SEIS columnas, no de tres, y cada card ocupa dos.
+   Visualmente da exactamente lo mismo que 3 columnas (una card mide
+   2 columnas + 1 gap = (ancho - 2 gaps) / 3, igual que antes), pero
+   permite colocar la última fila corrida media card, para que la card
+   suelta y el CTA de la galería queden centrados en vez de alineados
+   con las tres de arriba. Ver .service-card--fila-final. */
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: var(--gap);
 }
+.services-grid > .service-card { grid-column: span 2; }
 
 /* Card de foto a sangre completa: la imagen ocupa toda la card, un degradado
    oscuro la cubre desde abajo para que el texto blanco encima siempre se lea,
@@ -979,9 +986,21 @@ p { font-size: clamp(0.93rem, 1.5vw, 1.05rem); color: var(--text-soft); line-hei
   line-height: 1.5;
 }
 
-.service-card--centered { grid-column: 2; }
-@media (max-width: 900px) { .services-grid { grid-template-columns: repeat(2, 1fr); } .service-card--centered { grid-column: auto; } }
-@media (max-width: 580px) { .services-grid { grid-template-columns: 1fr; } }
+/* Última fila: la card suelta en las columnas 2-3 y el CTA en las 4-5.
+   Quedan las dos centradas, separadas por un gap, y sin llegar a los
+   bordes que marcan las tres cards de la fila de arriba. */
+.services-grid > .service-card--fila-final { grid-column: 2 / span 2; }
+
+@media (max-width: 900px) {
+  /* Dos cards por fila: 4 columnas de las que cada card ocupa 2. */
+  .services-grid { grid-template-columns: repeat(4, 1fr); }
+  .services-grid > .service-card--fila-final { grid-column: span 2; }
+}
+@media (max-width: 580px) {
+  .services-grid { grid-template-columns: 1fr; }
+  .services-grid > .service-card,
+  .services-grid > .service-card--fila-final { grid-column: auto; }
+}
 
 /* ─── ABOUT / DOCTOR ────────────────────────────────────────────────────── */
 #doctor {
@@ -1274,3 +1293,133 @@ p { font-size: clamp(0.93rem, 1.5vw, 1.05rem); color: var(--text-soft); line-hei
   .wa-float { padding: 0.75rem; border-radius: 50%; width: 52px; height: 52px; justify-content: center; }
   .wa-float__text { display: none; }
 }
+
+/* ─── CTA A LA GALERÍA DE CASOS ─────────────────────────────────────────
+   Vive dentro de .ba-section (fondo navy), debajo de .ba-note. Botón
+   fantasma en cobre: no compite con el CTA sólido de "Agendar consulta". */
+.ba-cta { text-align: center; margin-top: 2rem; }
+.ba-cta__btn {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  border: 1px solid rgba(216,169,127,0.45);
+  border-radius: 999px;
+  padding: 0.85rem 2rem;
+  text-decoration: none;
+  transition: background 0.3s var(--ease-out), color 0.3s var(--ease-out), border-color 0.3s;
+}
+.ba-cta__btn:hover { background: var(--gold); border-color: var(--gold); color: #fff; }
+
+/* ─── BOTÓN "VER GALERÍA" DEL NAV ───────────────────────────────────────
+   Va al lado de "Agendar consulta" pero en el mismo registro que el botón
+   "Llamar al servicio de ORL" del hero (.btn-ghost): translúcido claro,
+   no cobre. Así no compiten dos botones sólidos por la misma atención y
+   queda claro cuál es la acción principal.
+
+   Sobre el nav sólido (fondo hueso) el translúcido claro no se vería, así
+   que ahí pasa a un contorno oscuro, igual que .btn-ghost-dark. */
+.nav__cta--ghost {
+  background: rgba(246,243,238,0.12);
+  color: var(--text-light);
+  border: 1.5px solid rgba(246,243,238,0.35);
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+}
+.nav__cta--ghost:hover {
+  background: rgba(246,243,238,0.24);
+  transform: translateY(-1px);
+}
+.nav.is-solid .nav__cta--ghost {
+  background: transparent;
+  color: var(--text-soft);
+  border-color: var(--line);
+}
+.nav.is-solid .nav__cta--ghost:hover {
+  background: var(--gold-faint);
+  border-color: var(--gold);
+  color: var(--navy);
+}
+
+/* ─── TARJETA CTA DE LA GRILLA DE SERVICIOS ─────────────────────────────
+   La grilla tiene 7 tarjetas en 3 columnas, así que la séptima quedaba
+   sola y colgada en la última fila. Esta tarjeta ocupa las dos columnas
+   que sobraban: completa la fila y de paso mete el acceso a la galería
+   justo donde el visitante está eligiendo qué se quiere operar. */
+/* Ocupa las columnas 4-5: mismo ancho que una card, al lado de la card
+   suelta de la última fila.
+
+   El fondo NO es el --bg-dark del footer: a ese nivel de oscuridad el
+   título en blanco hueso tiraba a azul y perdía nitidez. Este navy medio
+   levanta el contraste del título y del cobre del kicker sin salirse de
+   la paleta. */
+.services-cta {
+  grid-column: 4 / span 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.55rem;
+  padding: clamp(1.25rem, 2.5vw, 1.75rem);
+  border-radius: var(--radius-lg);
+  background: #274866;
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+}
+.services-cta::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 130%; aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(216,169,127,0.20) 0%, transparent 62%);
+  pointer-events: none;
+}
+.services-cta > * { position: relative; z-index: 1; }
+/* Los tamaños son más chicos que en el resto de la página a propósito:
+   el bloque tiene que entrar en el alto de una card (4:3) sin estirar
+   la fila, y ahora mide lo que una card de ancho. */
+.services-cta__kicker {
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+.services-cta__title {
+  font-family: var(--serif-display);
+  font-weight: 500;
+  font-size: clamp(1.05rem, 1.9vw, 1.25rem);
+  line-height: 1.3;
+  color: #FFFFFF;
+}
+.services-cta__text {
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.8);
+  max-width: 32ch;
+}
+.services-cta__btn {
+  margin-top: 0.3rem;
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background: var(--gold);
+  border-radius: 50px;
+  padding: 0.7rem 1.5rem;
+  text-decoration: none;
+  transition: background 0.25s var(--ease-out), transform 0.25s var(--ease-out);
+}
+.services-cta__btn:hover { background: var(--gold-dark); transform: translateY(-1px); }
+
+@media (max-width: 900px) { .services-cta { grid-column: span 2; } }
+@media (max-width: 580px) { .services-cta { grid-column: auto; min-height: 15rem; } }

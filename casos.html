@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Galería de casos reales del Dr. Wilmer Palacios: rinoplastia y rinoseptoplastia primaria y secundaria, antes y después en varias proyecciones, con el seguimiento fotográfico de cada paciente. Caracas, Centro Médico Docente La Trinidad." />
+  <meta name="keywords" content="antes y después rinoplastia Caracas, casos rinoplastia Venezuela, rinoseptoplastia secundaria antes y después, resultados rinoplastia ultrasónica, Dr. Wilmer Palacios casos" />
+  <meta property="og:title" content="Galería de casos · Dr. Wilmer Palacios" />
+  <meta property="og:description" content="Antes y después de rinoplastia y rinoseptoplastia, en varias proyecciones y con seguimiento a largo plazo." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0F1E2E" />
+  <title>Galería de casos · Dr. Wilmer Palacios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=20260906" />
+  <link rel="stylesheet" href="casos.css?v=20260906" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🩺</text></svg>" />
+</head>
+<body>
+
+  <!-- ════ NAV ════ -->
+  <nav class="nav" id="main-nav" aria-label="Navegación principal">
+    <div class="container">
+      <div class="nav__inner">
+        <a href="index.html" class="nav__logo" aria-label="Inicio Dr. Wilmer Palacios">
+          <span class="nav__logo-name">Dr. Wilmer Palacios</span>
+          <span class="nav__logo-sub">Otorrinolaringología · Rinología · Caracas</span>
+        </a>
+        <ul class="nav__links">
+          <li><a href="index.html#servicios">Servicios</a></li>
+          <li><a href="index.html#doctor">El Doctor</a></li>
+          <li><a href="casos.html">Casos</a></li>
+          <li><a href="index.html#ubicacion">Ubicación</a></li>
+        </ul>
+        <div class="nav__actions">
+          <a href="index.html#booking" class="nav__cta">Agendar consulta</a>
+          <button class="nav__hamburger" aria-label="Menú" aria-expanded="false" id="nav-hamburger">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ════ HEADER DE PÁGINA ════ -->
+  <header class="casos-hero">
+    <div class="container">
+      <span class="section-kicker">Casos reales</span>
+      <h1>Antes y después,<br /><em>vista por vista</em></h1>
+      <p class="casos-hero__lead">
+        Cada caso está documentado en varias proyecciones (frente, perfil, tres cuartos y base)
+        y con el tiempo de postoperatorio a la vista. La nariz cicatriza durante años: mostrar
+        cuándo se tomó cada foto es parte del resultado.
+      </p>
+    </div>
+  </header>
+
+  <!-- ════ FILTROS (se llenan desde casos.js) ════ -->
+  <div class="casos-filtros">
+    <div class="container">
+      <div class="casos-filtros__inner" id="casos-filtros" role="group" aria-label="Filtrar casos"></div>
+    </div>
+  </div>
+
+  <!-- ════ LISTA DE CASOS ════ -->
+  <section aria-label="Casos">
+    <div class="container">
+      <div class="casos-lista" id="casos-lista"></div>
+
+      <div class="casos-mas" id="casos-mas" hidden>
+        <button class="casos-mas__btn" type="button" id="casos-mas-btn">Ver más casos</button>
+      </div>
+
+      <p class="casos-aviso">
+        Fotografías clínicas del Dr. Wilmer Palacios Torrealba, tomadas con el protocolo de
+        seguimiento fotográfico de su consulta. Los resultados de una rinoplastia varían según
+        la anatomía de cada paciente y solo se consideran definitivos pasados dos o tres años
+        del postoperatorio: las imágenes de esta galería documentan casos concretos y no
+        constituyen una promesa de resultado.
+      </p>
+    </div>
+  </section>
+
+  <!-- ════ LIGHTBOX ════ -->
+  <div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="Caso en detalle" aria-hidden="true">
+    <div class="lb__visor">
+      <button class="lb__cerrar" id="lb-cerrar" type="button" aria-label="Cerrar">✕</button>
+      <button class="lb__nav lb__nav--prev" id="lb-prev" type="button" aria-label="Vista anterior">‹</button>
+      <img class="lb__img" id="lb-img" src="" alt="" />
+      <button class="lb__nav lb__nav--next" id="lb-next" type="button" aria-label="Vista siguiente">›</button>
+    </div>
+    <aside class="lb__panel">
+      <span class="lb__num" id="lb-num"></span>
+      <h2 class="lb__titulo" id="lb-titulo"></h2>
+      <div class="lb__meta" id="lb-meta"></div>
+      <div class="lb__desc" id="lb-desc"></div>
+      <p class="lb__contador" id="lb-contador"></p>
+    </aside>
+  </div>
+
+  <!-- ════ FOOTER ════ -->
+  <footer class="footer" aria-label="Pie de página">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <span class="footer__logo">Dr. Wilmer Palacios</span>
+          <span class="footer__logo-sub">Otorrinolaringología · Rinología · Caracas</span>
+          <p>Cirugía nasal funcional y estética en el Centro Médico Docente La Trinidad. Función primero, resultado natural siempre.</p>
+        </div>
+        <div>
+          <span class="footer__col-title">Servicios</span>
+          <ul class="footer__col-links">
+            <li><a href="index.html#servicios">Rinoplastia de preservación</a></li>
+            <li><a href="index.html#servicios">Rinoseptoplastia ultrasónica</a></li>
+            <li><a href="index.html#servicios">Rinoplastia secundaria</a></li>
+            <li><a href="index.html#servicios">Septoplastia y obstrucción nasal</a></li>
+            <li><a href="index.html#servicios">Otorrinolaringología general</a></li>
+          </ul>
+        </div>
+        <div>
+          <span class="footer__col-title">Consultorio</span>
+          <ul class="footer__col-links">
+            <li><a href="index.html#doctor">Sobre el Doctor</a></li>
+            <li><a href="casos.html">Galería de casos</a></li>
+            <li><a href="index.html#ubicacion">Ubicación</a></li>
+            <li><a href="index.html#faq">Preguntas frecuentes</a></li>
+          </ul>
+        </div>
+        <div>
+          <span class="footer__col-title">Contacto</span>
+          <ul class="footer__col-links">
+            <li><a href="tel:+582129496203">Servicio de ORL: 0212-949-6203</a></li>
+            <li><a href="tel:+582129492829">Servicio de ORL: 0212-949-2829</a></li>
+            <li><a href="index.html#ubicacion">La Trinidad, Caracas</a></li>
+            <li><a href="index.html#booking">Agendar consulta</a></li>
+            <li><a href="https://www.instagram.com/drwilpalacios/" target="_blank" rel="noopener noreferrer">Instagram: @drwilpalacios</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copy">© 2026 Dr. Wilmer Palacios Torrealba · Otorrinolaringología y Rinología · Caracas, Venezuela</p>
+        <div class="footer__socials">
+          <a href="https://www.instagram.com/drwilpalacios/" target="_blank" rel="noopener noreferrer" class="footer__social" aria-label="Instagram">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="https://www.threads.net/@drwilpalacios" target="_blank" rel="noopener noreferrer" class="footer__social" aria-label="Threads">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.1 11.1c-.1 0-.2-.1-.3-.1-.2-3.2-1.9-5-4.8-5h-.1c-1.7 0-3.2.7-4 2.1l1.6 1.1c.7-1 1.7-1.2 2.4-1.2h.1c.9 0 1.6.3 2 .8.3.4.5.9.7 1.6-.8-.1-1.7-.2-2.6-.1-2.7.2-4.4 1.7-4.3 3.9.1 1.1.6 2 1.5 2.7.8.5 1.8.8 2.8.7 1.4-.1 2.4-.6 3.2-1.6.6-.7.9-1.7 1.1-2.9.7.4 1.2 1 1.5 1.7.5 1.1.5 3-1 4.5-1.3 1.3-2.9 1.9-5.3 1.9-2.7 0-4.7-.9-6-2.6C4.5 16.9 3.9 15 3.9 12.5s.6-4.4 1.7-5.9c1.3-1.7 3.3-2.6 6-2.6 2.7 0 4.8.9 6.1 2.6.6.9 1.1 2 1.4 3.3l1.9-.5c-.3-1.6-.9-3-1.7-4.1C17.6 3.1 15 2 11.7 2h-.1C8.3 2 5.7 3.1 4 5.3 2.5 7.3 1.7 9.9 1.7 12.5s.8 5.2 2.3 7.2C5.7 21.9 8.3 23 11.6 23h.1c3 0 5-.8 6.7-2.5 2.2-2.2 2.2-5 1.5-6.7-.5-1.2-1.5-2.2-2.8-2.7zm-4.8 5.4c-1.1.1-2.2-.4-2.3-1.5-.1-.8.5-1.7 2.4-1.8h.6c.7 0 1.3.1 1.9.2-.2 2.6-1.5 3-2.6 3.1z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script defer src="main.js?v=20260906"></script>
+  <script defer src="casos-data.js?v=20260906"></script>
+  <script defer src="casos.js?v=20260906"></script>
+</body>
+</html>

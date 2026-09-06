@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260805" />
+  <link rel="stylesheet" href="styles.css?v=20260906b" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🩺</text></svg>" />
 </head>
 <body>
@@ -30,9 +30,11 @@
           <li><a href="#servicios">Servicios</a></li>
           <li><a href="#doctor">El Doctor</a></li>
           <li><a href="#resultados">Resultados</a></li>
+          <li><a href="casos.html">Casos</a></li>
           <li><a href="#ubicacion">Ubicación</a></li>
         </ul>
         <div class="nav__actions">
+          <a href="casos.html" class="nav__cta nav__cta--ghost">Ver galería</a>
           <a href="#booking" class="nav__cta">Agendar consulta</a>
           <button class="nav__hamburger" aria-label="Menú" aria-expanded="false" id="nav-hamburger">
             <span></span><span></span><span></span>
@@ -156,6 +158,9 @@
         </div>
       </div>
       <p class="ba-note">Casos reales del Dr. Palacios.</p>
+      <div class="ba-cta">
+        <a href="casos.html" class="ba-cta__btn">Ver la galería completa de casos</a>
+      </div>
     </div>
   </section>
 
@@ -316,7 +321,9 @@
           </div>
         </div>
         <!-- Armonización facial -->
-        <div class="service-card service-card--centered">
+        <!-- Última fila: esta card y el CTA de la galería van centrados,
+             corridos media card respecto de las tres de arriba. -->
+        <div class="service-card service-card--fila-final">
           <div class="service-card__img">
             <img src="assets/img/service-armonizacion.jpg" alt="Armonización facial en equipo" loading="lazy" />
           </div>
@@ -324,6 +331,13 @@
             <h3 class="service-card__title">Armonización facial en equipo</h3>
             <p class="service-card__desc">Mentoplastia y procedimientos complementarios junto a cirujanos plásticos, cuando el equilibrio del rostro lo pide.</p>
           </div>
+        </div>
+        <!-- CTA A LA GALERÍA: completa la última fila de la grilla -->
+        <div class="services-cta reveal">
+          <span class="services-cta__kicker">Casos reales</span>
+          <p class="services-cta__title">Vea el trabajo, no solo la descripción</p>
+          <p class="services-cta__text">Una variedad de casos documentados en varias proyecciones, con el tiempo de postoperatorio de cada foto.</p>
+          <a href="casos.html" class="services-cta__btn">Ver galería de casos</a>
         </div>
       </div>
     </div>
@@ -463,6 +477,7 @@
           <ul class="footer__col-links">
             <li><a href="#doctor">Sobre el Doctor</a></li>
             <li><a href="#resultados">Antes y después</a></li>
+            <li><a href="casos.html">Galería de casos</a></li>
             <li><a href="#ubicacion">Ubicación</a></li>
             <li><a href="#faq">Preguntas frecuentes</a></li>
           </ul>
@@ -492,8 +507,8 @@
     </div>
   </footer>
 
-  <script defer src="lib/gsap.min.js?v=20260805"></script>
-  <script defer src="lib/ScrollTrigger.min.js?v=20260805"></script>
-  <script defer src="main.js?v=20260805"></script>
+  <script defer src="lib/gsap.min.js?v=20260906b"></script>
+  <script defer src="lib/ScrollTrigger.min.js?v=20260906b"></script>
+  <script defer src="main.js?v=20260906b"></script>
 </body>
 </html>
